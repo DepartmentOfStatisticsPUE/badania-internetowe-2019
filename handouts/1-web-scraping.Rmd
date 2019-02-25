@@ -6,7 +6,6 @@ output: html_notebook
 
 # R 
 
-
 Najważniejsze pakiety:
 
 + `rvest`
@@ -49,6 +48,16 @@ floor_area
 
 # Python
 
++ requests -- wydanie zapytan
++ lxml -- parsowanie htmla
+
+Narzędzia do webscrapping
+
++ BeautifulSoup 
++ selenium
+
+
+
 Wesja w Pythonie (rozwiązanie zaproponowane przez Panią Zuzannę)
 
 ```{python, engine.path = "~/anaconda3/bin/python"}
@@ -70,3 +79,17 @@ area = tree.xpath('//li[@class="hidden-xs offer-item-area"]/text()')
 print('Prices: ', prices)
 print('Area: ', area)
 ```
+
+# Bash
+
+Required: 
+
++ html-xml-utils
++ wget
+
+```{bash}
+wget -qO- "https://www.otodom.pl/wynajem/mieszkanie/poznan/?search%5Bdist%5D=0&search%5Bsubregion_id%5D=462&search%5Bcity_id%5D=1" | 
+  hxnormalize -x | 
+  hxselect "li.offer-item-price"
+```
+
