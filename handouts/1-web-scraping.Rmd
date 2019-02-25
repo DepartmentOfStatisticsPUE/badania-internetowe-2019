@@ -1,0 +1,49 @@
+---
+title: "Web-scraping w R"
+output: html_notebook
+---
+
+
+# R 
+
+
+Najważniejsze pakiety:
+
++ `rvest`
++ `xml2`
++ `stringr` albo `stringi`
+
+Inne przydatne pakiety:
+
++ `RSelenium`
+
+Więcej informacji: https://cran.r-project.org/web/views/WebTechnologies.html
+
+```{r}
+library(rvest)
+```
+
+
+# Python
+
+Wesja w Pythonie (rozwiązanie zaproponowane przez Panią Zuzannę)
+
+```{python, engine.path = "~/anaconda3/bin/python"}
+from lxml import html
+import requests
+page = requests.get('https://www.otodom.pl/wynajem/mieszkanie/poznan/?search%5Bdist%5D=0&search%5Bsubregion_id%5D=462&search%5Bcity_id%5D=1')
+tree = html.fromstring(page.content)
+#Lista cen
+prices = tree.xpath('//li[@class="offer-item-price"]/text()')
+#Usunięcie spacji, znaczników nowej linii i niepotrzebnego tekstu
+prices = [x.strip().replace(' ', '').replace('zł/mc', '') for x in prices]
+#Zamiana na typ integer zamiast tekstowego
+prices = [int(x) for x in prices]
+
+#Lista powierzchni
+area = tree.xpath('//li[@class="hidden-xs offer-item-area"]/text()')
+
+
+print('Prices: ', prices)
+print('Area: ', area)
+```
