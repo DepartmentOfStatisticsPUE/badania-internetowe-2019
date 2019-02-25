@@ -1,0 +1,49 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Pakiety
+
+```{r}
+library(xml2)
+library(jsonlite)
+library(tidyverse)
+```
+
+# Dostęp bez autoryzacji
+
+## Rowery miejskie 
+
+```{r}
+xml_file <- read_xml("http://api.nextbike.net/maps/nextbike-official.xml")
+
+str(xml_file,1)
+```
+
+```{r}
+json_file <- read_json("http://api.nextbike.net/maps/nextbike-official.json")
+str(json_file,1)
+```
+
+# Dane z banku danych lokalnych
+
+
+```{r}
+link <- "https://bdl.stat.gov.pl/api/v1/data/by-variable/3643?format=jsonapi&year=2000,2010"
+```
+
+```{r}
+m <- read_json(link, simplifyVector = TRUE) 
+
+str(m,1)
+```
+
+```{r}
+m$data$attributes %>%
+  unnest()
+```
+```{bash}
+curl "https://api.spotify.com/v1/artists/1vCWHaC5f2uS3yhpwWbIA6/albums?album_type=SINGLE&offset=20&limit=10"
+```
+

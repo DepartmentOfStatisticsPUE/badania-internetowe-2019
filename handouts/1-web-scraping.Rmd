@@ -80,6 +80,35 @@ print('Prices: ', prices)
 print('Area: ', area)
 ```
 
+Kolejna propozycja, tym razem od Pana Bartosza
+
+```{python, engine.path = "~/anaconda3/bin/python"}
+import urllib.request
+from bs4 import BeautifulSoup
+from urllib.request import Request, urlopen
+
+#zmienna web zawierająca adres strony
+web = Request('https://www.otodom.pl/wynajem/mieszkanie/poznan/?searc'
+              'h%5Bdist%5D=0&search%5Bsubregion_id%5D=462&search%5Bcit'
+              'y_id%5D=1', headers={'User-Agent': "Mozilla/5.0"})
+
+#odczytywanie strony
+strona = urlopen(web).read()
+soup =  BeautifulSoup(strona, 'html.parser')
+
+#szukanie cen
+prices = soup.find_all('li', class_='offer-item-price')
+
+######## dodatek od MB
+#prices = soup.select('li.offer-item-price') ## alternatywa z selectem i css
+prices = [i.text.strip().replace(' ', '').replace('zł/mc', '').replace(',', '.') for i in prices]
+######## dodatek od MB
+
+## alternatywne rozwiaznaie
+
+print(prices)
+```
+
 # Bash
 
 Required: 
