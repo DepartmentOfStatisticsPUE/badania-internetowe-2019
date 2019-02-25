@@ -19,8 +19,31 @@ Inne przydatne pakiety:
 
 Więcej informacji: https://cran.r-project.org/web/views/WebTechnologies.html
 
+
 ```{r}
 library(rvest)
+library(stringr)
+
+page <- read_html("https://www.otodom.pl/wynajem/mieszkanie/poznan/?search%5Bdist%5D=0&search%5Bsubregion_id%5D=462&search%5Bcity_id%5D=1")
+
+page %>%
+  html_nodes("li.offer-item-price") %>%
+  html_text() %>%
+  str_replace_all("\n|/mc|zł| ","") %>%
+  str_replace(",",".") %>%
+  as.numeric() -> prices
+
+prices
+
+
+page %>%
+  html_nodes("li.offer-item-area") %>%
+  html_text() %>%
+  str_replace_all("m²| ","") %>%
+  str_replace(",",".") %>%
+  as.numeric() -> floor_area
+
+floor_area
 ```
 
 

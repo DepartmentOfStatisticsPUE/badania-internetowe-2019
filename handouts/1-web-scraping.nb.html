@@ -1777,11 +1777,34 @@ $(document).ready(function () {
 <p>Więcej informacji: <a href="https://cran.r-project.org/web/views/WebTechnologies.html" class="uri">https://cran.r-project.org/web/views/WebTechnologies.html</a></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShydmVzdClcbmBgYCJ9 -->
-<pre class="r"><code>library(rvest)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShydmVzdClcbmxpYnJhcnkoc3RyaW5ncilcbnBhZ2UgPC0gcmVhZF9odG1sKFwiaHR0cHM6Ly93d3cub3RvZG9tLnBsL3d5bmFqZW0vbWllc3prYW5pZS9wb3puYW4vP3NlYXJjaCU1QmRpc3QlNUQ9MCZzZWFyY2glNUJzdWJyZWdpb25faWQlNUQ9NDYyJnNlYXJjaCU1QmNpdHlfaWQlNUQ9MVwiKVxucGFnZSAlPiVcbiAgaHRtbF9ub2RlcyhcImxpLm9mZmVyLWl0ZW0tcHJpY2VcIikgJT4lXG4gIGh0bWxfdGV4dCgpICU+JVxuICBzdHJfcmVwbGFjZV9hbGwoXCJcXG58L21jfHrFgnwgXCIsXCJcIikgJT4lXG4gIHN0cl9yZXBsYWNlKFwiLFwiLFwiLlwiKSAlPiVcbiAgYXMubnVtZXJpYygpIC0+IHByaWNlc1xucHJpY2VzXG5gYGAifQ== -->
+<pre class="r"><code>library(rvest)
+library(stringr)
+page &lt;- read_html(&quot;https://www.otodom.pl/wynajem/mieszkanie/poznan/?search%5Bdist%5D=0&amp;search%5Bsubregion_id%5D=462&amp;search%5Bcity_id%5D=1&quot;)
+page %&gt;%
+  html_nodes(&quot;li.offer-item-price&quot;) %&gt;%
+  html_text() %&gt;%
+  str_replace_all(&quot;\n|/mc|zł| &quot;,&quot;&quot;) %&gt;%
+  str_replace(&quot;,&quot;,&quot;.&quot;) %&gt;%
+  as.numeric() -&gt; prices
+prices</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiB4bWwyXG4ifQ== -->
-<pre><code>Loading required package: xml2</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAxMzAwIDI1MDAgMjI1MCAxNzAwIDE1MDAgMTgwMCAxNzQwIDEzMDAgMjUwMCAxMTAwIDE2NTAgMjMwMCAxNTAwIDEzNTAgMTEwMCAyMjUwIDE4MDAgMTcwMCAxMzAwIDE2MDBcblsyMV0gMTgwMCAyNDAwIDIyNTAgMTQ5MCAxNjAwIDE2MDAgMTUwMCAyMzAwIDE2MDAgNDUwMCAyMjAwXG4ifQ== -->
+<pre><code> [1] 1300 2500 2250 1700 1500 1800 1740 1300 2500 1100 1650 2300 1500 1350 1100 2250 1800 1700 1300 1600
+[21] 1800 2400 2250 1490 1600 1600 1500 2300 1600 4500 2200</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFnZSAlPiVcbiAgaHRtbF9ub2RlcyhcImxpLm9mZmVyLWl0ZW0tYXJlYVwiKSAlPiVcbiAgaHRtbF90ZXh0KCkgJT4lXG4gIHN0cl9yZXBsYWNlX2FsbChcIm3CsnwgXCIsXCJcIikgJT4lXG4gIHN0cl9yZXBsYWNlKFwiLFwiLFwiLlwiKSAlPiVcbiAgYXMubnVtZXJpYygpIC0+IGZsb29yX2FyZWFcbmZsb29yX2FyZWFcbmBgYCJ9 -->
+<pre class="r"><code>page %&gt;%
+  html_nodes(&quot;li.offer-item-area&quot;) %&gt;%
+  html_text() %&gt;%
+  str_replace_all(&quot;m²| &quot;,&quot;&quot;) %&gt;%
+  str_replace(&quot;,&quot;,&quot;.&quot;) %&gt;%
+  as.numeric() -&gt; floor_area
+floor_area</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSAzMy4wMCA0Mi4wMCA2MC4wMCA0OC4wMCA1My4wMCA0My4wMCA2My44MyAzMy4wMCA0Mi4wMCAzMS4wMCAzNi4wMCA0Ni4wMCAyNi41MCA0MS4wMCAxNy41MCA2MC4wMCA0OS4wMFxuWzE4XSA0OC4wMCAzMC4wMCAzMC4wMCA0Ni4wMCA0Ny4wMCA0My4wMCAzMC4wMCAzNS4wMCA1MC4wMCA1Ny4wMCAzMi4yOSA0MC4wMCA5NS4wMCA0Mi4wMFxuIn0= -->
+<pre><code> [1] 33.00 42.00 60.00 48.00 53.00 43.00 63.83 33.00 42.00 31.00 36.00 46.00 26.50 41.00 17.50 60.00 49.00
+[18] 48.00 30.00 30.00 46.00 47.00 43.00 30.00 35.00 50.00 57.00 32.29 40.00 95.00 42.00</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1810,14 +1833,14 @@ area = tree.xpath(&#39;//li[@class=&quot;hidden-xs offer-item-area&quot;]/text()
 print(&#39;Prices: &#39;, prices)
 print(&#39;Area: &#39;, area)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUHJpY2VzOiAgWzEzMDAsIDI1MDAsIDIyNTAsIDE3MDAsIDE5OTksIDE5MDAsIDE0NjAsIDEzMDAsIDI1MDAsIDExMDAsIDE2NTAsIDIzMDAsIDE1MDAsIDEzNTAsIDExMDAsIDIyNTAsIDE4MDAsIDE3MDAsIDEzMDAsIDE2MDAsIDE4MDAsIDI0MDAsIDIyNTAsIDE0OTAsIDE2MDAsIDE2MDAsIDE1MDAsIDIzMDAsIDE2MDAsIDQ1MDAsIDIyMDBdXG5BcmVhOiAgWyczMyBtwrInLCAnNDIgbcKyJywgJzYwIG3CsicsICc0OCBtwrInLCAnNTcgbcKyJywgJzUwIG3CsicsICczNSw5OCBtwrInLCAnMzMgbcKyJywgJzQyIG3CsicsICczMSBtwrInLCAnMzYgbcKyJywgJzQ2IG3CsicsICcyNiw1MCBtwrInLCAnNDEgbcKyJywgJzE3LDUwIG3CsicsICc2MCBtwrInLCAnNDkgbcKyJywgJzQ4IG3CsicsICczMCBtwrInLCAnMzAgbcKyJywgJzQ2IG3CsicsICc0NyBtwrInLCAnNDMgbcKyJywgJzMwIG3CsicsICczNSBtwrInLCAnNTAgbcKyJywgJzU3IG3CsicsICczMiwyOSBtwrInLCAnNDAgbcKyJywgJzk1IG3CsicsICc0MiBtwrInXVxuIn0= -->
-<pre><code>Prices:  [1300, 2500, 2250, 1700, 1999, 1900, 1460, 1300, 2500, 1100, 1650, 2300, 1500, 1350, 1100, 2250, 1800, 1700, 1300, 1600, 1800, 2400, 2250, 1490, 1600, 1600, 1500, 2300, 1600, 4500, 2200]
-Area:  [&#39;33 m²&#39;, &#39;42 m²&#39;, &#39;60 m²&#39;, &#39;48 m²&#39;, &#39;57 m²&#39;, &#39;50 m²&#39;, &#39;35,98 m²&#39;, &#39;33 m²&#39;, &#39;42 m²&#39;, &#39;31 m²&#39;, &#39;36 m²&#39;, &#39;46 m²&#39;, &#39;26,50 m²&#39;, &#39;41 m²&#39;, &#39;17,50 m²&#39;, &#39;60 m²&#39;, &#39;49 m²&#39;, &#39;48 m²&#39;, &#39;30 m²&#39;, &#39;30 m²&#39;, &#39;46 m²&#39;, &#39;47 m²&#39;, &#39;43 m²&#39;, &#39;30 m²&#39;, &#39;35 m²&#39;, &#39;50 m²&#39;, &#39;57 m²&#39;, &#39;32,29 m²&#39;, &#39;40 m²&#39;, &#39;95 m²&#39;, &#39;42 m²&#39;]</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiUHJpY2VzOiAgWzEzMDAsIDI1MDAsIDIyNTAsIDE3MDAsIDIzMDAsIDI0MDAsIDE1NTAsIDEzMDAsIDI1MDAsIDExMDAsIDE2NTAsIDIzMDAsIDE1MDAsIDEzNTAsIDExMDAsIDIyNTAsIDE4MDAsIDE3MDAsIDEzMDAsIDE2MDAsIDE4MDAsIDI0MDAsIDIyNTAsIDE0OTAsIDE2MDAsIDE2MDAsIDE1MDAsIDIzMDAsIDE2MDAsIDQ1MDAsIDIyMDBdXG5BcmVhOiAgWyczMyBtwrInLCAnNDIgbcKyJywgJzYwIG3CsicsICc0OCBtwrInLCAnNTcgbcKyJywgJzc1IG3CsicsICc0OCBtwrInLCAnMzMgbcKyJywgJzQyIG3CsicsICczMSBtwrInLCAnMzYgbcKyJywgJzQ2IG3CsicsICcyNiw1MCBtwrInLCAnNDEgbcKyJywgJzE3LDUwIG3CsicsICc2MCBtwrInLCAnNDkgbcKyJywgJzQ4IG3CsicsICczMCBtwrInLCAnMzAgbcKyJywgJzQ2IG3CsicsICc0NyBtwrInLCAnNDMgbcKyJywgJzMwIG3CsicsICczNSBtwrInLCAnNTAgbcKyJywgJzU3IG3CsicsICczMiwyOSBtwrInLCAnNDAgbcKyJywgJzk1IG3CsicsICc0MiBtwrInXVxuIn0= -->
+<pre><code>Prices:  [1300, 2500, 2250, 1700, 2300, 2400, 1550, 1300, 2500, 1100, 1650, 2300, 1500, 1350, 1100, 2250, 1800, 1700, 1300, 1600, 1800, 2400, 2250, 1490, 1600, 1600, 1500, 2300, 1600, 4500, 2200]
+Area:  [&#39;33 m²&#39;, &#39;42 m²&#39;, &#39;60 m²&#39;, &#39;48 m²&#39;, &#39;57 m²&#39;, &#39;75 m²&#39;, &#39;48 m²&#39;, &#39;33 m²&#39;, &#39;42 m²&#39;, &#39;31 m²&#39;, &#39;36 m²&#39;, &#39;46 m²&#39;, &#39;26,50 m²&#39;, &#39;41 m²&#39;, &#39;17,50 m²&#39;, &#39;60 m²&#39;, &#39;49 m²&#39;, &#39;48 m²&#39;, &#39;30 m²&#39;, &#39;30 m²&#39;, &#39;46 m²&#39;, &#39;47 m²&#39;, &#39;43 m²&#39;, &#39;30 m²&#39;, &#39;35 m²&#39;, &#39;50 m²&#39;, &#39;57 m²&#39;, &#39;32,29 m²&#39;, &#39;40 m²&#39;, &#39;95 m²&#39;, &#39;42 m²&#39;]</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiV2ViLXNjcmFwaW5nIHcgUiIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCiMgUiAKCgpOYWp3YcW8bmllanN6ZSBwYWtpZXR5OgoKKyBgcnZlc3RgCisgYHhtbDJgCisgYHN0cmluZ3JgIGFsYm8gYHN0cmluZ2lgCgpJbm5lIHByenlkYXRuZSBwYWtpZXR5OgoKKyBgUlNlbGVuaXVtYAoKV2nEmWNlaiBpbmZvcm1hY2ppOiBodHRwczovL2NyYW4uci1wcm9qZWN0Lm9yZy93ZWIvdmlld3MvV2ViVGVjaG5vbG9naWVzLmh0bWwKCmBgYHtyfQpsaWJyYXJ5KHJ2ZXN0KQpgYGAKCgojIFB5dGhvbgoKV2VzamEgdyBQeXRob25pZSAocm96d2nEhXphbmllIHphcHJvcG9ub3dhbmUgcHJ6ZXogUGFuacSFIFp1emFubsSZKQoKYGBge3B5dGhvbiwgZW5naW5lLnBhdGggPSAifi9hbmFjb25kYTMvYmluL3B5dGhvbiJ9CmZyb20gbHhtbCBpbXBvcnQgaHRtbAppbXBvcnQgcmVxdWVzdHMKcGFnZSA9IHJlcXVlc3RzLmdldCgnaHR0cHM6Ly93d3cub3RvZG9tLnBsL3d5bmFqZW0vbWllc3prYW5pZS9wb3puYW4vP3NlYXJjaCU1QmRpc3QlNUQ9MCZzZWFyY2glNUJzdWJyZWdpb25faWQlNUQ9NDYyJnNlYXJjaCU1QmNpdHlfaWQlNUQ9MScpCnRyZWUgPSBodG1sLmZyb21zdHJpbmcocGFnZS5jb250ZW50KQojTGlzdGEgY2VuCnByaWNlcyA9IHRyZWUueHBhdGgoJy8vbGlbQGNsYXNzPSJvZmZlci1pdGVtLXByaWNlIl0vdGV4dCgpJykKI1VzdW5pxJljaWUgc3BhY2ppLCB6bmFjem5pa8OzdyBub3dlaiBsaW5paSBpIG5pZXBvdHJ6ZWJuZWdvIHRla3N0dQpwcmljZXMgPSBbeC5zdHJpcCgpLnJlcGxhY2UoJyAnLCAnJykucmVwbGFjZSgnesWCL21jJywgJycpIGZvciB4IGluIHByaWNlc10KI1phbWlhbmEgbmEgdHlwIGludGVnZXIgemFtaWFzdCB0ZWtzdG93ZWdvCnByaWNlcyA9IFtpbnQoeCkgZm9yIHggaW4gcHJpY2VzXQoKI0xpc3RhIHBvd2llcnpjaG5pCmFyZWEgPSB0cmVlLnhwYXRoKCcvL2xpW0BjbGFzcz0iaGlkZGVuLXhzIG9mZmVyLWl0ZW0tYXJlYSJdL3RleHQoKScpCgoKcHJpbnQoJ1ByaWNlczogJywgcHJpY2VzKQpwcmludCgnQXJlYTogJywgYXJlYSkKYGBgCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiV2ViLXNjcmFwaW5nIHcgUiIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCiMgUiAKCgpOYWp3YcW8bmllanN6ZSBwYWtpZXR5OgoKKyBgcnZlc3RgCisgYHhtbDJgCisgYHN0cmluZ3JgIGFsYm8gYHN0cmluZ2lgCgpJbm5lIHByenlkYXRuZSBwYWtpZXR5OgoKKyBgUlNlbGVuaXVtYAoKV2nEmWNlaiBpbmZvcm1hY2ppOiBodHRwczovL2NyYW4uci1wcm9qZWN0Lm9yZy93ZWIvdmlld3MvV2ViVGVjaG5vbG9naWVzLmh0bWwKCgpgYGB7cn0KbGlicmFyeShydmVzdCkKbGlicmFyeShzdHJpbmdyKQoKcGFnZSA8LSByZWFkX2h0bWwoImh0dHBzOi8vd3d3Lm90b2RvbS5wbC93eW5hamVtL21pZXN6a2FuaWUvcG96bmFuLz9zZWFyY2glNUJkaXN0JTVEPTAmc2VhcmNoJTVCc3VicmVnaW9uX2lkJTVEPTQ2MiZzZWFyY2glNUJjaXR5X2lkJTVEPTEiKQoKcGFnZSAlPiUKICBodG1sX25vZGVzKCJsaS5vZmZlci1pdGVtLXByaWNlIikgJT4lCiAgaHRtbF90ZXh0KCkgJT4lCiAgc3RyX3JlcGxhY2VfYWxsKCJcbnwvbWN8esWCfCAiLCIiKSAlPiUKICBzdHJfcmVwbGFjZSgiLCIsIi4iKSAlPiUKICBhcy5udW1lcmljKCkgLT4gcHJpY2VzCgpwcmljZXMKCgpwYWdlICU+JQogIGh0bWxfbm9kZXMoImxpLm9mZmVyLWl0ZW0tYXJlYSIpICU+JQogIGh0bWxfdGV4dCgpICU+JQogIHN0cl9yZXBsYWNlX2FsbCgibcKyfCAiLCIiKSAlPiUKICBzdHJfcmVwbGFjZSgiLCIsIi4iKSAlPiUKICBhcy5udW1lcmljKCkgLT4gZmxvb3JfYXJlYQoKZmxvb3JfYXJlYQpgYGAKCgojIFB5dGhvbgoKV2VzamEgdyBQeXRob25pZSAocm96d2nEhXphbmllIHphcHJvcG9ub3dhbmUgcHJ6ZXogUGFuacSFIFp1emFubsSZKQoKYGBge3B5dGhvbiwgZW5naW5lLnBhdGggPSAifi9hbmFjb25kYTMvYmluL3B5dGhvbiJ9CmZyb20gbHhtbCBpbXBvcnQgaHRtbAppbXBvcnQgcmVxdWVzdHMKcGFnZSA9IHJlcXVlc3RzLmdldCgnaHR0cHM6Ly93d3cub3RvZG9tLnBsL3d5bmFqZW0vbWllc3prYW5pZS9wb3puYW4vP3NlYXJjaCU1QmRpc3QlNUQ9MCZzZWFyY2glNUJzdWJyZWdpb25faWQlNUQ9NDYyJnNlYXJjaCU1QmNpdHlfaWQlNUQ9MScpCnRyZWUgPSBodG1sLmZyb21zdHJpbmcocGFnZS5jb250ZW50KQojTGlzdGEgY2VuCnByaWNlcyA9IHRyZWUueHBhdGgoJy8vbGlbQGNsYXNzPSJvZmZlci1pdGVtLXByaWNlIl0vdGV4dCgpJykKI1VzdW5pxJljaWUgc3BhY2ppLCB6bmFjem5pa8OzdyBub3dlaiBsaW5paSBpIG5pZXBvdHJ6ZWJuZWdvIHRla3N0dQpwcmljZXMgPSBbeC5zdHJpcCgpLnJlcGxhY2UoJyAnLCAnJykucmVwbGFjZSgnesWCL21jJywgJycpIGZvciB4IGluIHByaWNlc10KI1phbWlhbmEgbmEgdHlwIGludGVnZXIgemFtaWFzdCB0ZWtzdG93ZWdvCnByaWNlcyA9IFtpbnQoeCkgZm9yIHggaW4gcHJpY2VzXQoKI0xpc3RhIHBvd2llcnpjaG5pCmFyZWEgPSB0cmVlLnhwYXRoKCcvL2xpW0BjbGFzcz0iaGlkZGVuLXhzIG9mZmVyLWl0ZW0tYXJlYSJdL3RleHQoKScpCgoKcHJpbnQoJ1ByaWNlczogJywgcHJpY2VzKQpwcmludCgnQXJlYTogJywgYXJlYSkKYGBgCg==</div>
 
 
 
