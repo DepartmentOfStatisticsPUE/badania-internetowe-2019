@@ -1,0 +1,77 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Ładujemy biblioteki (pakiety), które wykorzystamy do pobrania i przetworzenia danych
+
+Wstawianie fragmentu kodu to ctrl+alt+i
+
+```{r}
+library(xml2) ## do wczytania i przetwarzania xml
+library(jsonlite) ## do przetwarzania i wczytania json
+library(tidyverse)
+```
+
+Wczytujemy dane z nextbike w formacie xml
+
+```{r}
+link <- "http://nextbike.net/maps/nextbike-official.xml?city=192"
+pzn <- read_xml(link)
+```
+
+Zobaczmy jak wygląda obiekt pzn
+
+```{r}
+pzn 
+```
+
+Wczytujemy dane z nextbike w rozszerzeniu json
+
+```{r}
+link2 <- "http://nextbike.net/maps/nextbike-official.json?city=192"
+pzn2 <- read_json(link2)
+```
+
+Zobaczmy strukture pliku
+
+```{r}
+str(pzn2,3)
+```
+
+Przejdziemy do wybierania elementów z obiektu xml_document
+
+```{r}
+pzn %>%
+  xml_find_all("//place") %>%
+  xml_attr("bikes") %>%
+  as.integer()
+```
+
+Pobieramy dane ze spotify
+
+```{r}
+library(spotifyr)
+```
+
+
+```{r}
+Sys.setenv(SPOTIFY_CLIENT_ID = '85ac06b883d14ce998ff6514b96f156e')
+Sys.setenv(SPOTIFY_CLIENT_SECRET = '38026f9ce4154fdfb34d66472bc99ad8')
+access_token <- get_spotify_access_token()
+```
+
+```{r}
+wynik <- get_artist_audio_features("Burzum")
+```
+
+```{r}
+wynik
+```
+
+```{r}
+wynik %>%
+  select(danceability, speechiness, liveness) %>%
+  plot()
+```
+
