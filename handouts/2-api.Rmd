@@ -21,6 +21,38 @@ xml_file <- read_xml("http://api.nextbike.net/maps/nextbike-official.xml")
 str(xml_file,1)
 ```
 
+Jakie kraje i miasta są dostępne?
+
+```{r}
+xml_file %>%
+  xml_find_all("//country") %>%
+  xml_attr("name")
+```
+
+Gdzie są dostępne rowery?
+
+```{r}
+xml_file %>%
+  xml_find_all("//place")  %>%
+  xml_attr("bikes") %>%
+  as.numeric() %>%
+  table() %>%
+  barplot()
+```
+
+Numery rowerów (id sa unikalne)
+
+```{r}
+xml_file %>%
+  xml_find_all("//place")  %>%
+  xml_attr("bike_numbers") %>%
+  str_split(',') %>%
+  unlist() %>%
+  na.omit() %>%
+  table() %>%
+  table()
+```
+
 ```{r}
 json_file <- read_json("http://api.nextbike.net/maps/nextbike-official.json")
 str(json_file,1)

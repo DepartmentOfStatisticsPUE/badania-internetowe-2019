@@ -1,5 +1,5 @@
 ---
-title: "Web-scraping w R"
+title: "Web-scraping w R / Pythonie / etc"
 output: html_notebook
 ---
 
@@ -107,6 +107,41 @@ prices = [i.text.strip().replace(' ', '').replace('zł/mc', '').replace(',', '.'
 ## alternatywne rozwiaznaie
 
 print(prices)
+```
+
+Kolejna propozycja. Tym razem od Pani Joanny
+
+```{python, engine.path = "~/anaconda3/bin/python"}
+import requests
+from bs4 import BeautifulSoup
+import re
+
+# Pobieram stronę
+link = "https://www.otodom.pl/wynajem/mieszkanie/poznan/?search%5Bdist%5D=0&search%5Bsubregion_id%5D=462&search%5Bcity_id%5D=1"
+strona = requests.get(link)
+html = strona.text
+soup = BeautifulSoup(html, features="html.parser")
+
+# Pobieram ceny
+cena = soup.select('li.offer-item-price')
+cena_czysta = []
+
+for el in cena:
+    cena_czysta.extend(re.findall(r'\d+',str(el).replace(" ","")))
+
+cena_czysta = [int(el) for el in cena_czysta]
+print(cena_czysta)
+
+# Pobieram powierzchnie
+powierzchnia = soup.select('li.hidden-xs.offer-item-area')
+powierzchnia_czysta = []
+
+for el in powierzchnia:
+    powierzchnia_czysta.extend(re.findall(r'\d+', str(el).replace(" ", "")))
+
+powierzchnia_czysta = [int(el) for el in powierzchnia_czysta]
+print(powierzchnia_czysta)
+
 ```
 
 # Bash
