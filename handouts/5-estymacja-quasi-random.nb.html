@@ -1788,14 +1788,36 @@ The following object is masked from ‘package:survival’:
 <p>Generujemy dane z określonego rozkładu</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJvcC50YWJsZSh0YWJsZShkZWx0YSkpXG5cbmBgYCJ9 -->
-<pre class="r"><code>prop.table(table(delta))
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMTIzKVxuTl9wb3AgPC0gMWU2XG4jIyBnZW5lcnVqxJkgZGFuZSBkbGEgcG9wdWxhY2ppXG5YXzEgPC0gcmJpbm9tKG4gPSBOX3BvcCwgc2l6ZSA9IDEsIHByb2IgPSAwLjQ1KSAjIyBwxYJlxIdcblhfMiA8LSBycG9pcyhuID0gTl9wb3AsIGxhbWJkYSA9IDIpICMjIGxpY3piYSBkemllY2lcblhfMyA8LSByYmlub20obiA9IE5fcG9wLCBzaXplID0gMSwgcHJvYiA9IDAuNykgIyMgbWllanNjZSB6YW1pZXN6a2FuaWEgKDE9d2llcywgMD1taWFzdG8pXG5ZXzEgPC0gMjAwICsgMjAqWF8xIC0gMzAqWF8zICsgcm5vcm0obiA9IE5fcG9wLCBtZWFuID0gMCwgc2QgPSAxMClcbnBvcF9kYXRhIDwtIGRhdGEuZnJhbWUoWSA9IFlfMSwgWF8xID0gZmFjdG9yKFhfMSksIFhfMiwgWF8zID0gZmFjdG9yKFhfMykpXG5zdW1tYXJ5KHBvcF9kYXRhKVxuYGBgIn0= -->
+<pre class="r"><code>set.seed(123)
+N_pop &lt;- 1e6
+## generuję dane dla populacji
+X_1 &lt;- rbinom(n = N_pop, size = 1, prob = 0.45) ## płeć
+X_2 &lt;- rpois(n = N_pop, lambda = 2) ## liczba dzieci
+X_3 &lt;- rbinom(n = N_pop, size = 1, prob = 0.7) ## miejsce zamieszkania (1=wies, 0=miasto)
+Y_1 &lt;- 200 + 20*X_1 - 30*X_3 + rnorm(n = N_pop, mean = 0, sd = 10)
+pop_data &lt;- data.frame(Y = Y_1, X_1 = factor(X_1), X_2, X_3 = factor(X_3))
+summary(pop_data)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiZGVsdGFcbiAgICAgICAwICAgICAgICAxIFxuMC4zODYzODkgMC42MTM2MTEgXG4ifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgIFkgICAgICAgICBYXzEgICAgICAgICAgICAgWF8yICAgICAgICAgWF8zICAgICAgIFxuIE1pbi4gICA6MTI1LjIgICAwOjU1MDQ5NSAgIE1pbi4gICA6IDAuMDAwICAgMDoyOTk2NzAgIFxuIDFzdCBRdS46MTcyLjkgICAxOjQ0OTUwNSAgIDFzdCBRdS46IDEuMDAwICAgMTo3MDAzMzAgIFxuIE1lZGlhbiA6MTg2LjggICAgICAgICAgICAgIE1lZGlhbiA6IDIuMDAwICAgICAgICAgICAgIFxuIE1lYW4gICA6MTg4LjAgICAgICAgICAgICAgIE1lYW4gICA6IDIuMDAxICAgICAgICAgICAgIFxuIDNyZCBRdS46MjAxLjAgICAgICAgICAgICAgIDNyZCBRdS46IDMuMDAwICAgICAgICAgICAgIFxuIE1heC4gICA6MjYxLjYgICAgICAgICAgICAgIE1heC4gICA6MTIuMDAwICAgICAgICAgICAgIFxuIn0= -->
+<pre><code>       Y         X_1             X_2         X_3       
+ Min.   :125.2   0:550495   Min.   : 0.000   0:299670  
+ 1st Qu.:172.9   1:449505   1st Qu.: 1.000   1:700330  
+ Median :186.8              Median : 2.000             
+ Mean   :188.0              Mean   : 2.001             
+ 3rd Qu.:201.0              3rd Qu.: 3.000             
+ Max.   :261.6              Max.   :12.000             </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyMgZ2VuZXJ1asSZIHptaWVubmEgb2tyZcWbbGFqxIVjxIUgcHJ6eW5hbGXFvG5vc8SHIGRvIGJpZyBkYXRhXG5kZWx0YSA8LSByYmlub20obiA9IE5fcG9wLCBzaXplID0gMSwgXG4gICAgICAgICAgICAgICAgcHJvYiA9IGV4cCgxMCArIFhfMiAtIDE1KlhfMykgLyAoMSArIGV4cCgxMCArIFhfMiAtIDE1KlhfMykpKVxucHJvcC50YWJsZSh0YWJsZShkZWx0YSkpXG5gYGAifQ== -->
+<pre class="r"><code>## generuję zmienna określającą przynależnosć do big data
+delta &lt;- rbinom(n = N_pop, size = 1, 
+                prob = exp(10 + X_2 - 15*X_3) / (1 + exp(10 + X_2 - 15*X_3)))
+prop.table(table(delta))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiZGVsdGFcbiAgICAgICAwICAgICAgICAxIFxuMC42MzM4MjYgMC4zNjYxNzQgXG4ifQ== -->
 <pre><code>delta
        0        1 
-0.386389 0.613611 </code></pre>
+0.633826 0.366174 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYmlnX2RhdGFfaW5jIDwtIHdoaWNoKGRlbHRhID09IDEpXG5iaWdfZGF0YSA8LSBwb3BfZGF0YVtiaWdfZGF0YV9pbmMsXVxuYmlnX2RhdGEkd2FnYSA8LSBucm93KHBvcF9kYXRhKS9ucm93KGJpZ19kYXRhKVxuYGBgIn0= -->
 <pre class="r"><code>big_data_inc &lt;- which(delta == 1)
@@ -1809,14 +1831,14 @@ big_data$waga &lt;- nrow(pop_data)/nrow(big_data)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihiaWdfZGF0YSRZKVxuYGBgIn0= -->
 <pre class="r"><code>mean(big_data$Y)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIxMi44MzI5XG4ifQ== -->
-<pre><code>[1] 212.8329</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIwMy41NTY5XG4ifQ== -->
+<pre><code>[1] 203.5569</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihwb3BfZGF0YSRZKVxuYGBgIn0= -->
 <pre class="r"><code>mean(pop_data$Y)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIyMi41MTE1XG4ifQ== -->
-<pre><code>[1] 222.5115</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE4Ny45ODczXG4ifQ== -->
+<pre><code>[1] 187.9873</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1848,8 +1870,8 @@ pop_x2 &lt;- sum(pop_data$X_2)</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVzIDwtIHBvc3RTdHJhdGlmeShkZXNpZ24gPSBiaWdfZGF0YV9zdnksIH5YXzEgKyBYXzMsIHBvcF94MXgzKVxuc3Z5dGFibGUoflhfMStYXzMsIHJlcylcbmBgYCJ9 -->
-<pre class="r"><code>res &lt;- postStratify(design = big_data_svy, ~X_1 + X_3, pop_x1x3)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVzIDwtIHBvc3RTdHJhdGlmeShkZXNpZ24gPSBiaWdfZGF0YV9zdnksIH5YXzErIFhfMywgcG9wX3gxeDMpXG5zdnl0YWJsZSh+WF8xK1hfMywgcmVzKVxuYGBgIn0= -->
+<pre class="r"><code>res &lt;- postStratify(design = big_data_svy, ~X_1+ X_3, pop_x1x3)
 svytable(~X_1+X_3, res)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiICAgWF8zXG5YXzEgICAgICAwICAgICAgMVxuICAwIDE2NDg0NSAzODU2NTBcbiAgMSAxMzQ4MjUgMzE0NjgwXG4ifQ== -->
@@ -1861,9 +1883,9 @@ X_1      0      1
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeSh3ZWlnaHRzKHJlcykpXG5gYGAifQ== -->
 <pre class="r"><code>summary(weights(res))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgTWluLiAxc3QgUXUuICBNZWRpYW4gICAgTWVhbiAzcmQgUXUuICAgIE1heC4gXG4gIDEuMDAwICAgMS4wMDAgICAxLjQzNSAgIDEuNjMwICAgMi4zNzEgICAyLjU1NSBcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgTWluLiAxc3QgUXUuICBNZWRpYW4gICAgTWVhbiAzcmQgUXUuICAgIE1heC4gXG4gIDEuMDAwICAgMS4wMDAgICAxLjAwMCAgIDIuNzMxICAgMS4wMDAgIDEwLjU0NSBcbiJ9 -->
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   1.000   1.435   1.630   2.371   2.555 </code></pre>
+  1.000   1.000   1.000   2.731   1.000  10.545 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1872,9 +1894,9 @@ X_1      0      1
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3Z5bWVhbih+WSwgcmVzKVsxXVxuYGBgIn0= -->
 <pre class="r"><code>svymean(~Y, res)[1]</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgIFkgXG4yMTYuMjE1NyBcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgIFkgXG4xODcuOTcyNiBcbiJ9 -->
 <pre><code>       Y 
-216.2157 </code></pre>
+187.9726 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1884,38 +1906,51 @@ X_1      0      1
 <p>W przypadku liniowej funkcji dostajemy te te same wagi co z post-stratyfikacji</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVzX2NhbGliIDwtIGNhbGlicmF0ZShiaWdfZGF0YV9zdnksIFxuICAgICAgICAgICAgICAgICAgICAgICBmb3JtdWxhID0gbGlzdCh+WF8xICsgWF8zKSwgXG4gICAgICAgICAgICAgICAgICAgICAgIHBvcHVsYXRpb24gPSBsaXN0KHBvcF94MXgzKSwgXG4gICAgICAgICAgICAgICAgICAgICAgIGNhbGZ1biA9IGNhbC5saW5lYXIpXG5zdnltZWFuKH5ZLCByZXNfY2FsaWIpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucmVzX2NhbGliIDwtIGNhbGlicmF0ZShiaWdfZGF0YV9zdnksIFxuICAgICAgICAgICAgICAgICAgICAgICBmb3JtdWxhID0gbGlzdCh+WF8xKSwgXG4gICAgICAgICAgICAgICAgICAgICAgIHBvcHVsYXRpb24gPSBsaXN0KHBvcF94MSksIFxuICAgICAgICAgICAgICAgICAgICAgICBjYWxmdW4gPSBjYWwubGluZWFyKVxuc3Z5bWVhbih+WSwgcmVzX2NhbGliKVxuYGBgIn0= -->
 <pre class="r"><code>res_calib &lt;- calibrate(big_data_svy, 
-                       formula = list(~X_1 + X_3), 
-                       population = list(pop_x1x3), 
+                       formula = list(~X_1), 
+                       population = list(pop_x1), 
                        calfun = cal.linear)
 svymean(~Y, res_calib)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgIG1lYW4gICAgIFNFXG5ZIDIxNi4yMiAwLjAxODdcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgIG1lYW4gICAgIFNFXG5ZIDIwMy41NSAwLjAyNTNcbiJ9 -->
 <pre><code>    mean     SE
-Y 216.22 0.0187</code></pre>
+Y 203.55 0.0253</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeSh3ZWlnaHRzKHJlc19jYWxpYikpXG5gYGAifQ== -->
 <pre class="r"><code>summary(weights(res_calib))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgTWluLiAxc3QgUXUuICBNZWRpYW4gICAgTWVhbiAzcmQgUXUuICAgIE1heC4gXG4gIDEuMDAwICAgMS4wMDAgICAxLjQzNSAgIDEuNjMwICAgMi4zNzEgICAyLjU1NSBcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgTWluLiAxc3QgUXUuICBNZWRpYW4gICAgTWVhbiAzcmQgUXUuICAgIE1heC4gXG4gIDIuNzI4ICAgMi43MjggICAyLjczMyAgIDIuNzMxICAgMi43MzMgICAyLjczMyBcbiJ9 -->
 <pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   1.000   1.435   1.630   2.371   2.555 </code></pre>
+  2.728   2.728   2.733   2.731   2.733   2.733 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Mała symulacja</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYyhzcmVkbmlhX3Byb2JhID0gbWVhbih3eW5pa19uYWl2ZSksIFxuICBzcmVkbmlhX3Bvc3QgPSBtZWFuKHd5bmlrX3Bvc3QpLFxuICB3YXJ0b3NjX3ByYXcgPSBtZWFuKFlfMSkpXG5cbmBgYCJ9 -->
-<pre class="r"><code>c(srednia_proba = mean(wynik_naive), 
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuQiA8LSAxMFxud3luaWtfcG9zdCA8LSBudW1lcmljKEIpXG53eW5pa19uYWl2ZSA8LSBudW1lcmljKEIpXG5mb3IgKGkgaW4gMTpCKSB7XG4gIHNldC5zZWVkKGkpXG4gIGRlbHRhIDwtIHJiaW5vbShuID0gTl9wb3AsIHNpemUgPSAxLCBcbiAgICAgICAgICAgICAgICBwcm9iID0gZXhwKDEwIC0gMi41KlhfMiAtIDE1KlhfMykgLyAoMSArIGV4cCgxMCAtIDIuNSpYXzIgLSAxNSpYXzMpKSlcbiAgYmlnX2RhdGEgPC0gcG9wX2RhdGFbZGVsdGE9PTEsXVxuICBiaWdfZGF0YSR3YWdhIDwtIG5yb3cocG9wX2RhdGEpL25yb3coYmlnX2RhdGEpXG4gIGJpZ19kYXRhX3N2eSA8LSBzdnlkZXNpZ24oaWQgPSB+MSwgd2VpZ2h0cyA9IH4gd2FnYSwgc3RyYXRhPSB+WF8xICsgWF8zLCBkYXRhID0gYmlnX2RhdGEpXG4gIHJlcyA8LSBwb3N0U3RyYXRpZnkoZGVzaWduID0gYmlnX2RhdGFfc3Z5LCB+WF8xICsgWF8zLCBwb3BfeDF4MylcbiAgd3luaWtfcG9zdFtpXSA8LSBzdnltZWFuKH5ZLCByZXMpWzFdXG4gIHd5bmlrX25haXZlW2ldIDwtIG1lYW4oYmlnX2RhdGEkWSlcbn1cbmMoc3JlZG5pYV9wcm9iYSA9IG1lYW4od3luaWtfbmFpdmUpLCBcbiAgc3JlZG5pYV9wb3N0ID0gbWVhbih3eW5pa19wb3N0KSxcbiAgd2FydG9zY19wcmF3ID0gbWVhbihZXzEpKVxuYGBgIn0= -->
+<pre class="r"><code>B &lt;- 10
+wynik_post &lt;- numeric(B)
+wynik_naive &lt;- numeric(B)
+for (i in 1:B) {
+  set.seed(i)
+  delta &lt;- rbinom(n = N_pop, size = 1, 
+                prob = exp(10 - 2.5*X_2 - 15*X_3) / (1 + exp(10 - 2.5*X_2 - 15*X_3)))
+  big_data &lt;- pop_data[delta==1,]
+  big_data$waga &lt;- nrow(pop_data)/nrow(big_data)
+  big_data_svy &lt;- svydesign(id = ~1, weights = ~ waga, strata= ~X_1 + X_3, data = big_data)
+  res &lt;- postStratify(design = big_data_svy, ~X_1 + X_3, pop_x1x3)
+  wynik_post[i] &lt;- svymean(~Y, res)[1]
+  wynik_naive[i] &lt;- mean(big_data$Y)
+}
+c(srednia_proba = mean(wynik_naive), 
   srednia_post = mean(wynik_post),
-  wartosc_praw = mean(Y_1))
-</code></pre>
+  wartosc_praw = mean(Y_1))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoic3JlZG5pYV9wcm9iYSAgc3JlZG5pYV9wb3N0ICB3YXJ0b3NjX3ByYXcgXG4gICAgIDIxMi44MzI5ICAgICAgMjE2LjIxNDUgICAgICAyMjIuNTExNSBcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoic3JlZG5pYV9wcm9iYSAgc3JlZG5pYV9wb3N0ICB3YXJ0b3NjX3ByYXcgXG4gICAgIDIwOC45Mzg1ICAgICAgMTg4LjExMzAgICAgICAxODcuOTg3MyBcbiJ9 -->
 <pre><code>srednia_proba  srednia_post  wartosc_praw 
-     212.8329      216.2145      222.5115 </code></pre>
+     208.9385      188.1130      187.9873 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1935,10 +1970,10 @@ df &lt;- rbind(big_data,rest_data)
 df$flag &lt;- factor(df$flag)
 table(df$flag)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgIDAgICAgICAxIFxuMzg2Mzg5IDYxMzE4OCBcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG4gICAgIDAgICAgICAxIFxuNjMzODI2IDI2NzM3MiBcbiJ9 -->
 <pre><code>
      0      1 
-386389 613188 </code></pre>
+633826 267372 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1948,34 +1983,34 @@ table(df$flag)</code></pre>
 <p>Budujemy model objaśniajacy flag == 1</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubTAgPC0gZ2xtKGZsYWcgfiBYXzEgKyBYXzMsIGRhdGEgPSBkZiwgZmFtaWx5ID0gYmlub21pYWwoKSlcbnN1bW1hcnkobTApXG5gYGAifQ== -->
-<pre class="r"><code>m0 &lt;- glm(flag ~ X_1 + X_3, data = df, family = binomial())
-summary(m0)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtMClcblxuYGBgIn0= -->
+<pre class="r"><code>summary(m0)
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxuZ2xtKGZvcm11bGEgPSBmbGFnIH4gWF8xICsgWF8zLCBmYW1pbHkgPSBiaW5vbWlhbCgpLCBkYXRhID0gZGYpXG5cbkRldmlhbmNlIFJlc2lkdWFsczogXG4gICAgTWluICAgICAgIDFRICAgTWVkaWFuICAgICAgIDNRICAgICAgTWF4ICBcbi0yLjA3NjQgIC0wLjg5NjggICAwLjQ5NjIgICAwLjc2NTQgICAxLjQ4NjkgIFxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICAgRXN0aW1hdGUgU3RkLiBFcnJvciB6IHZhbHVlIFByKD58enwpICAgIFxuKEludGVyY2VwdCkgIDIuMDMyNTcwICAgMC4wMDU0MTkgICAzNzUuMSAgIDwyZS0xNiAqKipcblhfMTEgICAgICAgIC0xLjc4MTExNSAgIDAuMDA0NjIxICAtMzg1LjUgICA8MmUtMTYgKioqXG5YXzMxICAgICAgICAtMC45NTQ3MDkgICAwLjAwNTI1NyAgLTE4MS42ICAgPDJlLTE2ICoqKlxuLS0tXG5TaWduaWYuIGNvZGVzOiAgMCDigJgqKirigJkgMC4wMDEg4oCYKirigJkgMC4wMSDigJgq4oCZIDAuMDUg4oCYLuKAmSAwLjEg4oCYIOKAmSAxXG5cbihEaXNwZXJzaW9uIHBhcmFtZXRlciBmb3IgYmlub21pYWwgZmFtaWx5IHRha2VuIHRvIGJlIDEpXG5cbiAgICBOdWxsIGRldmlhbmNlOiAxMzMzNzk4ICBvbiA5OTk1NzYgIGRlZ3JlZXMgb2YgZnJlZWRvbVxuUmVzaWR1YWwgZGV2aWFuY2U6IDExMzkxMzUgIG9uIDk5OTU3NCAgZGVncmVlcyBvZiBmcmVlZG9tXG5BSUM6IDExMzkxNDFcblxuTnVtYmVyIG9mIEZpc2hlciBTY29yaW5nIGl0ZXJhdGlvbnM6IDRcbiJ9 -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxuZ2xtKGZvcm11bGEgPSBmbGFnIH4gWF8yICsgWF8zLCBmYW1pbHkgPSBiaW5vbWlhbCgpLCBkYXRhID0gZGYpXG5cbkRldmlhbmNlIFJlc2lkdWFsczogXG4gICAgTWluICAgICAgIDFRICAgTWVkaWFuICAgICAgIDNRICAgICAgTWF4ICBcbi02LjAyNDkgIC0wLjAzNTggIC0wLjAxMTMgICAwLjAwMDUgICA0LjM5NjYgIFxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICAgRXN0aW1hdGUgU3RkLiBFcnJvciB6IHZhbHVlIFByKD58enwpICAgIFxuKEludGVyY2VwdCkgIDE4LjE0OTkzICAgIDAuNjA3MDAgICAyOS45MCAgIDwyZS0xNiAqKipcblhfMiAgICAgICAgICAtMi4zMTM4NyAgICAwLjA4MjQ5ICAtMjguMDUgICA8MmUtMTYgKioqXG5YXzMxICAgICAgICAtMjMuMTg3MjkgICAgMC41OTkxMiAgLTM4LjcwICAgPDJlLTE2ICoqKlxuLS0tXG5TaWduaWYuIGNvZGVzOiAgMCDigJgqKirigJkgMC4wMDEg4oCYKirigJkgMC4wMSDigJgq4oCZIDAuMDUg4oCYLuKAmSAwLjEg4oCYIOKAmSAxXG5cbihEaXNwZXJzaW9uIHBhcmFtZXRlciBmb3IgYmlub21pYWwgZmFtaWx5IHRha2VuIHRvIGJlIDEpXG5cbiAgICBOdWxsIGRldmlhbmNlOiAxMDk1OTEwICBvbiA5MDExOTcgIGRlZ3JlZXMgb2YgZnJlZWRvbVxuUmVzaWR1YWwgZGV2aWFuY2U6ICAgIDk2OTcgIG9uIDkwMTE5NSAgZGVncmVlcyBvZiBmcmVlZG9tXG5BSUM6IDk3MDNcblxuTnVtYmVyIG9mIEZpc2hlciBTY29yaW5nIGl0ZXJhdGlvbnM6IDE0XG4ifQ== -->
 <pre><code>
 Call:
-glm(formula = flag ~ X_1 + X_3, family = binomial(), data = df)
+glm(formula = flag ~ X_2 + X_3, family = binomial(), data = df)
 
 Deviance Residuals: 
     Min       1Q   Median       3Q      Max  
--2.0764  -0.8968   0.4962   0.7654   1.4869  
+-6.0249  -0.0358  -0.0113   0.0005   4.3966  
 
 Coefficients:
              Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)  2.032570   0.005419   375.1   &lt;2e-16 ***
-X_11        -1.781115   0.004621  -385.5   &lt;2e-16 ***
-X_31        -0.954709   0.005257  -181.6   &lt;2e-16 ***
+(Intercept)  18.14993    0.60700   29.90   &lt;2e-16 ***
+X_2          -2.31387    0.08249  -28.05   &lt;2e-16 ***
+X_31        -23.18729    0.59912  -38.70   &lt;2e-16 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 1333798  on 999576  degrees of freedom
-Residual deviance: 1139135  on 999574  degrees of freedom
-AIC: 1139141
+    Null deviance: 1095910  on 901197  degrees of freedom
+Residual deviance:    9697  on 901195  degrees of freedom
+AIC: 9703
 
-Number of Fisher Scoring iterations: 4</code></pre>
+Number of Fisher Scoring iterations: 14</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1985,9 +2020,9 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <pre class="r"><code>df$waga &lt;- fitted(m0)^-1
 summary(df$waga)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgTWluLiAxc3QgUXUuICBNZWRpYW4gICAgTWVhbiAzcmQgUXUuICAgIE1heC4gXG4gIDEuMDAwICAgMS4wMDAgICAxLjU0MSAgMjAuMjQwICA3MC44NjUgIDcwLjg2NSBcbiJ9 -->
-<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-  1.000   1.000   1.541  20.240  70.865  70.865 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICBNaW4uICAgMXN0IFF1LiAgICBNZWRpYW4gICAgICBNZWFuICAgM3JkIFF1LiAgICAgIE1heC4gXG4xLjAwMGUrMDAgMS4wMDBlKzAwIDEuNTU5ZSswMyAyLjIyNGUrMDYgMS41NzZlKzA0IDEuNzA1ZSsxMSBcbiJ9 -->
+<pre><code>     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+1.000e+00 1.000e+00 1.559e+03 2.224e+06 1.576e+04 1.705e+11 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1996,8 +2031,8 @@ summary(df$waga)</code></pre>
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxud2l0aChzdWJzZXQoZGYsIGZsYWcgPT0gMSksIHdlaWdodGVkLm1lYW4oWSwgd2FnYSkpXG5gYGAifQ== -->
 <pre class="r"><code>with(subset(df, flag == 1), weighted.mean(Y, waga))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIxNS4xNTA2XG4ifQ== -->
-<pre><code>[1] 215.1506</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE5Mi4zNDQ5XG4ifQ== -->
+<pre><code>[1] 192.3449</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2006,12 +2041,29 @@ summary(df$waga)</code></pre>
 <h2>drzewo regresyjne</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxud2l0aChzdWJzZXQoZGYsIGZsYWcgPT0gMSksIHdlaWdodGVkLm1lYW4oWSwgd2FnYTIpKVxuXG5gYGAifQ== -->
-<pre class="r"><code>with(subset(df, flag == 1), weighted.mean(Y, waga2))
-</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubTIgPC0gcnBhcnQoZmxhZyB+IFhfMSArIFhfMisgWF8zLCBcbiAgICAgICAgICAgIGRhdGEgPSBkZixcbiAgICAgICAgICAgIG1ldGhvZCA9IFwiY2xhc3NcIilcbm0yXG5gYGAifQ== -->
+<pre class="r"><code>m2 &lt;- rpart(flag ~ X_1 + X_2+ X_3, 
+            data = df,
+            method = &quot;class&quot;)
+m2</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDIxNC44MTc1XG4ifQ== -->
-<pre><code>[1] 214.8175</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoibj0gOTAxMTk4IFxuXG5ub2RlKSwgc3BsaXQsIG4sIGxvc3MsIHl2YWwsICh5cHJvYilcbiAgICAgICogZGVub3RlcyB0ZXJtaW5hbCBub2RlXG5cbjEpIHJvb3QgOTAxMTk4IDI2NzM3MiAwICg3LjAzMzE0OWUtMDEgMi45NjY4NTFlLTAxKSAgXG4gIDIpIFhfMz0xIDYzNDU2MyAgICA3NDEgMCAoOS45ODgzMjNlLTAxIDEuMTY3NzMzZS0wMykgKlxuICAzKSBYXzM9MCAyNjY2MzUgICAgICA0IDEgKDEuNTAwMTc4ZS0wNSA5Ljk5OTg1MGUtMDEpICpcbiJ9 -->
+<pre><code>n= 901198 
+
+node), split, n, loss, yval, (yprob)
+      * denotes terminal node
+
+1) root 901198 267372 0 (7.033149e-01 2.966851e-01)  
+  2) X_3=1 634563    741 0 (9.988323e-01 1.167733e-03) *
+  3) X_3=0 266635      4 1 (1.500178e-05 9.999850e-01) *</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucHJlZGljdGlvbnMgPC0gcHJlZGljdChtMilcbmRmJHdhZ2EyIDwtIHByZWRpY3Rpb25zWywyXV4tMVxud2l0aChzdWJzZXQoZGYsIGZsYWcgPT0gMSksIHdlaWdodGVkLm1lYW4oWSwgd2FnYTIpKVxuYGBgIn0= -->
+<pre class="r"><code>predictions &lt;- predict(m2)
+df$waga2 &lt;- predictions[,2]^-1
+with(subset(df, flag == 1), weighted.mean(Y, waga2))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDE4OC4zNDI3XG4ifQ== -->
+<pre><code>[1] 188.3427</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -2019,7 +2071,7 @@ summary(df$waga)</code></pre>
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkoc3VydmV5KSAjIyBkbyBwb3N0LXN0cmF0eWZpa2FjamkgaSBrYWxpYnJhY2ppCmxpYnJhcnkocnBhcnQpCmBgYAoKIyBHZW5lcm93YW5pZSBkYW55Y2ggcG9wdWxhY2ppIGkgYmlnIGRhdGEKCkdlbmVydWplbXkgZGFuZSB6IG9rcmXFm2xvbmVnbyByb3prxYJhZHUKCmBgYHtyfQpzZXQuc2VlZCgxMjMpCk5fcG9wIDwtIDFlNgojIyBnZW5lcnVqxJkgZGFuZSBkbGEgcG9wdWxhY2ppClhfMSA8LSByYmlub20obiA9IE5fcG9wLCBzaXplID0gMSwgcHJvYiA9IDAuNDUpICMjIHDFgmXEhwpYXzIgPC0gcnBvaXMobiA9IE5fcG9wLCBsYW1iZGEgPSAwLjUpICMjIGxpY3piYSBkemllY2kKWF8zIDwtIHJiaW5vbShuID0gTl9wb3AsIHNpemUgPSAxLCBwcm9iID0gMC43KSAjIyBtaWVqc2NlIHphbWllc3prYW5pYSAoMT13aWVzLCAwPW1pYXN0bykKWV8xIDwtIDIwMCArIDIwKlhfMSAtIDE1KlhfMiArIDMwKlhfMyArIHJub3JtKG4gPSBOX3BvcCwgbWVhbiA9IDAsIHNkID0gMTApCnBvcF9kYXRhIDwtIGRhdGEuZnJhbWUoWSA9IFlfMSwgWF8xID0gZmFjdG9yKFhfMSksIFhfMiwgWF8zID0gZmFjdG9yKFhfMykpCnN1bW1hcnkocG9wX2RhdGEpCgojIyBnZW5lcnVqxJkgem1pZW5uYSBva3JlxZtsYWrEhWPEhSBwcnp5bmFsZcW8bm9zxIcgZG8gYmlnIGRhdGEKZGVsdGEgPC0gcmJpbm9tKG4gPSBOX3BvcCwgc2l6ZSA9IDEsIAogICAgICAgICAgICAgICAgcHJvYiA9IGV4cCg3IC0gMTAqWF8xICsgMTUqWF8yIC0gNypYXzMpIC8gKDEgKyBleHAoNyAtIDEwKlhfMSArIDE1KlhfMiAtIDcqWF8zKSkpCgpwcm9wLnRhYmxlKHRhYmxlKGRlbHRhKSkKYmlnX2RhdGFfaW5jIDwtIHdoaWNoKGRlbHRhID09IDEpCmJpZ19kYXRhIDwtIHBvcF9kYXRhW2JpZ19kYXRhX2luYyxdCmJpZ19kYXRhJHdhZ2EgPC0gbnJvdyhwb3BfZGF0YSkvbnJvdyhiaWdfZGF0YSkKCmBgYAoKYGBge3J9Cm1lYW4oYmlnX2RhdGEkWSkKbWVhbihwb3BfZGF0YSRZKQpgYGAKCgojIFBvc3Qtc3RyYXR5ZmlrYWNqYQoKYGBge3J9CmJpZ19kYXRhX3N2eSA8LSBzdnlkZXNpZ24oaWQgPSB+MSwgd2VpZ2h0cyA9IH4gd2FnYSwgc3RyYXRhPSB+WF8xICsgWF8zLCBkYXRhID0gYmlnX2RhdGEpCmJpZ19kYXRhX3N2eQpgYGAKClBvZGFqZW15IGRhbmUgeiBwb3B1bGFjamkKCmBgYHtyfQpwb3BfeDEgPC0geHRhYnMoflhfMSwgcG9wX2RhdGEpCnBvcF94MyA8LSB4dGFicyh+WF8zLCBwb3BfZGF0YSkKcG9wX3gxeDMgPC0geHRhYnMoflhfMSsgWF8zLCBwb3BfZGF0YSkKcG9wX3gyIDwtIHN1bShwb3BfZGF0YSRYXzIpCmBgYAoKYGBge3J9CnJlcyA8LSBwb3N0U3RyYXRpZnkoZGVzaWduID0gYmlnX2RhdGFfc3Z5LCB+WF8xICsgWF8zLCBwb3BfeDF4MykKc3Z5dGFibGUoflhfMStYXzMsIHJlcykKc3VtbWFyeSh3ZWlnaHRzKHJlcykpCmBgYAoKYGBge3J9CnN2eW1lYW4oflksIHJlcylbMV0KYGBgCgojIEthbGlicmFjamEKClcgcHJ6eXBhZGt1IGxpbmlvd2VqIGZ1bmtjamkgZG9zdGFqZW15IHRlIHRlIHNhbWUgd2FnaSBjbyB6IHBvc3Qtc3RyYXR5ZmlrYWNqaQpgYGB7cn0KcmVzX2NhbGliIDwtIGNhbGlicmF0ZShiaWdfZGF0YV9zdnksIAogICAgICAgICAgICAgICAgICAgICAgIGZvcm11bGEgPSBsaXN0KH5YXzEgKyBYXzMpLCAKICAgICAgICAgICAgICAgICAgICAgICBwb3B1bGF0aW9uID0gbGlzdChwb3BfeDF4MyksIAogICAgICAgICAgICAgICAgICAgICAgIGNhbGZ1biA9IGNhbC5saW5lYXIpCgpzdnltZWFuKH5ZLCByZXNfY2FsaWIpCnN1bW1hcnkod2VpZ2h0cyhyZXNfY2FsaWIpKQpgYGAKCk1hxYJhIHN5bXVsYWNqYQoKYGBge3J9CkIgPC0gMTAKd3luaWtfcG9zdCA8LSBudW1lcmljKEIpCnd5bmlrX25haXZlIDwtIG51bWVyaWMoQikKZm9yIChpIGluIDE6QikgewogIHNldC5zZWVkKGkpCiAgZGVsdGEgPC0gcmJpbm9tKG4gPSBOX3BvcCwgc2l6ZSA9IDEsIAogICAgICAgICAgICAgICAgcHJvYiA9IGV4cCg3IC0gMTAqWF8xICsgMTUqWF8yIC0gNypYXzMpIC8gKDEgKyBleHAoNyAtIDEwKlhfMSArIDE1KlhfMiAtIDcqWF8zKSkpCiAgYmlnX2RhdGEgPC0gcG9wX2RhdGFbZGVsdGE9PTEsXQogIGJpZ19kYXRhJHdhZ2EgPC0gbnJvdyhwb3BfZGF0YSkvbnJvdyhiaWdfZGF0YSkKICBiaWdfZGF0YV9zdnkgPC0gc3Z5ZGVzaWduKGlkID0gfjEsIHdlaWdodHMgPSB+IHdhZ2EsIHN0cmF0YT0gflhfMSArIFhfMywgZGF0YSA9IGJpZ19kYXRhKQogIHJlcyA8LSBwb3N0U3RyYXRpZnkoZGVzaWduID0gYmlnX2RhdGFfc3Z5LCB+WF8xICsgWF8zLCBwb3BfeDF4MykKICB3eW5pa19wb3N0W2ldIDwtIHN2eW1lYW4oflksIHJlcylbMV0KICB3eW5pa19uYWl2ZVtpXSA8LSBtZWFuKGJpZ19kYXRhJFkpCn0KCgoKYyhzcmVkbmlhX3Byb2JhID0gbWVhbih3eW5pa19uYWl2ZSksIAogIHNyZWRuaWFfcG9zdCA9IG1lYW4od3luaWtfcG9zdCksCiAgd2FydG9zY19wcmF3ID0gbWVhbihZXzEpKQpgYGAKCiMgUHJvcGVuc2l0eSBzY29yZSB3ZWlnaHRpbmcKCiMjIFByenlnb3Rvd2FuaWUgZGFueWNoCgpgYGB7cn0KcmVzdF9kYXRhIDwtIHBvcF9kYXRhWy1iaWdfZGF0YV9pbmMsXQpiaWdfZGF0YSR3YWdhIDwtIE5VTEwKYmlnX2RhdGEkZmxhZyA8LSAxCnJlc3RfZGF0YSRmbGFnIDwtIDAKCmRmIDwtIHJiaW5kKGJpZ19kYXRhLHJlc3RfZGF0YSkKZGYkZmxhZyA8LSBmYWN0b3IoZGYkZmxhZykKdGFibGUoZGYkZmxhZykKYGBgCgojIyBSZWdyZXNqYSBsb2dpc3R5Y3puYQoKCkJ1ZHVqZW15IG1vZGVsIG9iamHFm25pYWphY3kgZmxhZyA9PSAxCgpgYGB7cn0KbTAgPC0gZ2xtKGZsYWcgfiBYXzEgKyBYXzMsIGRhdGEgPSBkZiwgZmFtaWx5ID0gYmlub21pYWwoKSkKc3VtbWFyeShtMCkKYGBgCgpgYGB7cn0KZGYkd2FnYSA8LSBmaXR0ZWQobTApXi0xCnN1bW1hcnkoZGYkd2FnYSkKYGBgCgoKYGBge3J9CndpdGgoc3Vic2V0KGRmLCBmbGFnID09IDEpLCB3ZWlnaHRlZC5tZWFuKFksIHdhZ2EpKQpgYGAKCiMjIGRyemV3byByZWdyZXN5am5lCgpgYGB7cn0KbTIgPC0gcnBhcnQoZmxhZyB+IFhfMSArIFhfMywgCiAgICAgICAgICAgIGRhdGEgPSBkZiwKICAgICAgICAgICAgbWV0aG9kID0gImNsYXNzIikKbTIKCgpwcmVkaWN0aW9ucyA8LSBwcmVkaWN0KG0yKQpkZiR3YWdhMiA8LSBwcmVkaWN0aW9uc1ssMl1eLTEKCndpdGgoc3Vic2V0KGRmLCBmbGFnID09IDEpLCB3ZWlnaHRlZC5tZWFuKFksIHdhZ2EyKSkKCmBgYAoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkoc3VydmV5KSAjIyBkbyBwb3N0LXN0cmF0eWZpa2FjamkgaSBrYWxpYnJhY2ppCmxpYnJhcnkocnBhcnQpCmBgYAoKIyBHZW5lcm93YW5pZSBkYW55Y2ggcG9wdWxhY2ppIGkgYmlnIGRhdGEKCkdlbmVydWplbXkgZGFuZSB6IG9rcmXFm2xvbmVnbyByb3prxYJhZHUKCmBgYHtyfQpzZXQuc2VlZCgxMjMpCk5fcG9wIDwtIDFlNgojIyBnZW5lcnVqxJkgZGFuZSBkbGEgcG9wdWxhY2ppClhfMSA8LSByYmlub20obiA9IE5fcG9wLCBzaXplID0gMSwgcHJvYiA9IDAuNDUpICMjIHDFgmXEhwpYXzIgPC0gcnBvaXMobiA9IE5fcG9wLCBsYW1iZGEgPSAyKSAjIyBsaWN6YmEgZHppZWNpClhfMyA8LSByYmlub20obiA9IE5fcG9wLCBzaXplID0gMSwgcHJvYiA9IDAuNykgIyMgbWllanNjZSB6YW1pZXN6a2FuaWEgKDE9d2llcywgMD1taWFzdG8pCllfMSA8LSAyMDAgKyAyMCpYXzEgLSAzMCpYXzMgKyBybm9ybShuID0gTl9wb3AsIG1lYW4gPSAwLCBzZCA9IDEwKQpwb3BfZGF0YSA8LSBkYXRhLmZyYW1lKFkgPSBZXzEsIFhfMSA9IGZhY3RvcihYXzEpLCBYXzIsIFhfMyA9IGZhY3RvcihYXzMpKQpzdW1tYXJ5KHBvcF9kYXRhKQoKIyMgZ2VuZXJ1asSZIHptaWVubmEgb2tyZcWbbGFqxIVjxIUgcHJ6eW5hbGXFvG5vc8SHIGRvIGJpZyBkYXRhCmRlbHRhIDwtIHJiaW5vbShuID0gTl9wb3AsIHNpemUgPSAxLCAKICAgICAgICAgICAgICAgIHByb2IgPSBleHAoMTAgKyBYXzIgLSAxNSpYXzMpIC8gKDEgKyBleHAoMTAgKyBYXzIgLSAxNSpYXzMpKSkKCnByb3AudGFibGUodGFibGUoZGVsdGEpKQpiaWdfZGF0YV9pbmMgPC0gd2hpY2goZGVsdGEgPT0gMSkKYmlnX2RhdGEgPC0gcG9wX2RhdGFbYmlnX2RhdGFfaW5jLF0KYmlnX2RhdGEkd2FnYSA8LSBucm93KHBvcF9kYXRhKS9ucm93KGJpZ19kYXRhKQoKYGBgCgpgYGB7cn0KbWVhbihiaWdfZGF0YSRZKQptZWFuKHBvcF9kYXRhJFkpCmBgYAoKCiMgUG9zdC1zdHJhdHlmaWthY2phCgpgYGB7cn0KYmlnX2RhdGFfc3Z5IDwtIHN2eWRlc2lnbihpZCA9IH4xLCB3ZWlnaHRzID0gfiB3YWdhLCBzdHJhdGE9IH5YXzEgKyBYXzMsIGRhdGEgPSBiaWdfZGF0YSkKYmlnX2RhdGFfc3Z5CmBgYAoKUG9kYWplbXkgZGFuZSB6IHBvcHVsYWNqaQoKYGBge3J9CnBvcF94MSA8LSB4dGFicyh+WF8xLCBwb3BfZGF0YSkKcG9wX3gzIDwtIHh0YWJzKH5YXzMsIHBvcF9kYXRhKQpwb3BfeDF4MyA8LSB4dGFicyh+WF8xKyBYXzMsIHBvcF9kYXRhKQpwb3BfeDIgPC0gc3VtKHBvcF9kYXRhJFhfMikKYGBgCgpgYGB7cn0KcmVzIDwtIHBvc3RTdHJhdGlmeShkZXNpZ24gPSBiaWdfZGF0YV9zdnksIH5YXzErIFhfMywgcG9wX3gxeDMpCnN2eXRhYmxlKH5YXzErWF8zLCByZXMpCnN1bW1hcnkod2VpZ2h0cyhyZXMpKQpgYGAKCmBgYHtyfQpzdnltZWFuKH5ZLCByZXMpWzFdCmBgYAoKIyBLYWxpYnJhY2phCgpXIHByenlwYWRrdSBsaW5pb3dlaiBmdW5rY2ppIGRvc3RhamVteSB0ZSB0ZSBzYW1lIHdhZ2kgY28geiBwb3N0LXN0cmF0eWZpa2FjamkKYGBge3J9CnJlc19jYWxpYiA8LSBjYWxpYnJhdGUoYmlnX2RhdGFfc3Z5LCAKICAgICAgICAgICAgICAgICAgICAgICBmb3JtdWxhID0gbGlzdCh+WF8xKSwgCiAgICAgICAgICAgICAgICAgICAgICAgcG9wdWxhdGlvbiA9IGxpc3QocG9wX3gxKSwgCiAgICAgICAgICAgICAgICAgICAgICAgY2FsZnVuID0gY2FsLmxpbmVhcikKCnN2eW1lYW4oflksIHJlc19jYWxpYikKc3VtbWFyeSh3ZWlnaHRzKHJlc19jYWxpYikpCmBgYAoKTWHFgmEgc3ltdWxhY2phCgpgYGB7cn0KQiA8LSAxMAp3eW5pa19wb3N0IDwtIG51bWVyaWMoQikKd3luaWtfbmFpdmUgPC0gbnVtZXJpYyhCKQpmb3IgKGkgaW4gMTpCKSB7CiAgc2V0LnNlZWQoaSkKICBkZWx0YSA8LSByYmlub20obiA9IE5fcG9wLCBzaXplID0gMSwgCiAgICAgICAgICAgICAgICBwcm9iID0gZXhwKDEwIC0gMi41KlhfMiAtIDE1KlhfMykgLyAoMSArIGV4cCgxMCAtIDIuNSpYXzIgLSAxNSpYXzMpKSkKICBiaWdfZGF0YSA8LSBwb3BfZGF0YVtkZWx0YT09MSxdCiAgYmlnX2RhdGEkd2FnYSA8LSBucm93KHBvcF9kYXRhKS9ucm93KGJpZ19kYXRhKQogIGJpZ19kYXRhX3N2eSA8LSBzdnlkZXNpZ24oaWQgPSB+MSwgd2VpZ2h0cyA9IH4gd2FnYSwgc3RyYXRhPSB+WF8xICsgWF8zLCBkYXRhID0gYmlnX2RhdGEpCiAgcmVzIDwtIHBvc3RTdHJhdGlmeShkZXNpZ24gPSBiaWdfZGF0YV9zdnksIH5YXzEgKyBYXzMsIHBvcF94MXgzKQogIHd5bmlrX3Bvc3RbaV0gPC0gc3Z5bWVhbih+WSwgcmVzKVsxXQogIHd5bmlrX25haXZlW2ldIDwtIG1lYW4oYmlnX2RhdGEkWSkKfQoKCgpjKHNyZWRuaWFfcHJvYmEgPSBtZWFuKHd5bmlrX25haXZlKSwgCiAgc3JlZG5pYV9wb3N0ID0gbWVhbih3eW5pa19wb3N0KSwKICB3YXJ0b3NjX3ByYXcgPSBtZWFuKFlfMSkpCmBgYAoKIyBQcm9wZW5zaXR5IHNjb3JlIHdlaWdodGluZwoKIyMgUHJ6eWdvdG93YW5pZSBkYW55Y2gKCmBgYHtyfQpyZXN0X2RhdGEgPC0gcG9wX2RhdGFbLWJpZ19kYXRhX2luYyxdCmJpZ19kYXRhJHdhZ2EgPC0gTlVMTApiaWdfZGF0YSRmbGFnIDwtIDEKcmVzdF9kYXRhJGZsYWcgPC0gMAoKZGYgPC0gcmJpbmQoYmlnX2RhdGEscmVzdF9kYXRhKQpkZiRmbGFnIDwtIGZhY3RvcihkZiRmbGFnKQp0YWJsZShkZiRmbGFnKQpgYGAKCiMjIFJlZ3Jlc2phIGxvZ2lzdHljem5hCgoKQnVkdWplbXkgbW9kZWwgb2JqYcWbbmlhamFjeSBmbGFnID09IDEKCmBgYHtyfQptMCA8LSBnbG0oZmxhZyB+IFhfMiArIFhfMywgZGF0YSA9IGRmLCBmYW1pbHkgPSBiaW5vbWlhbCgpKQpzdW1tYXJ5KG0wKQpgYGAKCmBgYHtyfQpkZiR3YWdhIDwtIGZpdHRlZChtMCleLTEKc3VtbWFyeShkZiR3YWdhKQpgYGAKCgpgYGB7cn0Kd2l0aChzdWJzZXQoZGYsIGZsYWcgPT0gMSksIHdlaWdodGVkLm1lYW4oWSwgd2FnYSkpCmBgYAoKIyMgZHJ6ZXdvIHJlZ3Jlc3lqbmUKCmBgYHtyfQptMiA8LSBycGFydChmbGFnIH4gWF8xICsgWF8yKyBYXzMsIAogICAgICAgICAgICBkYXRhID0gZGYsCiAgICAgICAgICAgIG1ldGhvZCA9ICJjbGFzcyIpCm0yCgoKcHJlZGljdGlvbnMgPC0gcHJlZGljdChtMikKZGYkd2FnYTIgPC0gcHJlZGljdGlvbnNbLDJdXi0xCgp3aXRoKHN1YnNldChkZiwgZmxhZyA9PSAxKSwgd2VpZ2h0ZWQubWVhbihZLCB3YWdhMikpCgpgYGAKCg==</div>
 
 
 
